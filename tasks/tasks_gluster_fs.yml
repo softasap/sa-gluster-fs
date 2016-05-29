@@ -1,0 +1,22 @@
+---
+  - name: GlusterFS | Install dependencies
+    apt: pkg="{{item}}" state=present
+    become: yes
+    with_items:
+      - "software-properties-common"
+    tags:
+      - glusterFS
+
+  - name: GlusterFS | optionally add PPA
+    apt_repository: repo='ppa:gluster/glusterfs-{{glusterfs_version|default('3.7')}}'
+    when: ansible_distribution_release != "xenial"
+    become:
+    tags:
+      - glusterFS
+
+  - name: GlusterFS | install gluster fs
+    apt: pkg="glusterfs-server" state="present"
+    notify: restart glusterfs-server
+    become: yes
+    tags:
+      - glusterFS

@@ -1,0 +1,7 @@
+---
+# handlers file for sa-gluster-fs
+
+  - name: restart glusterfs-server
+    service: name="glusterfs-server" state=started enabled=yes
+    become: yes
+    when: docker_test is not defined
